@@ -35,4 +35,8 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-color: #F7F5F2;
 }
+
+button {
+  outline: 0;
+}
 </style>

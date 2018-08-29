@@ -1,19 +1,24 @@
 <template>
 <div class="wrapper">
   <app-header :title="headerTitle"/>
-  <div class="total-remaining">R${{ total.toFixed(2) }}</div>
+
+  <div class="total-remaining">R${{ calculateTotal().toFixed(2) }}</div>
 
   <div class="list">
-    <div class="item" v-for="(dish, i) in dishes" @click="">
-      <div class="item-name">{{ dish.name }}</div>
+    <div class="item" v-for="(dish, i) in dishes">
+      <div class="item-name" @click="selectItem(i)">{{ dish.name }}</div>
       
-      <div v-if="dish.left > 0" class="item-unpaid">
+      <div v-if="dish.left > 0" class="item-unpaid" @click="selectItem(i)">
         <div class="item-value cost">R${{ dish.left.toFixed(2) }}</div>
         <div v-if="dish.paying > 0" class="item-value paying">R${{ dish.paying.toFixed(2) }}</div>
       </div>
-      <template v-else class="list-item-paid">
-        <done-icon/>
-      </template>
+
+      <div v-else class="item-paid">
+        <done-icon class="check-icon"/>
+      </div>
+
+      <item-payment-mode v-if="dish.selected" class="item-payment"
+       :itemList="dishes" :ind="i" @itemUnselected="dishes = $event"/>
     </div>
   </div>
 
@@ -26,13 +31,15 @@
 
 <script>
 import "vue-material-design-icons/styles.css";
-import DoneIcon from "vue-material-design-icons/Check.vue";
-import Header   from "./Header.vue";
+import DoneIcon        from "vue-material-design-icons/Check.vue";
+import Header          from "./Header.vue";
+import ItemPaymentMode from "./ItemPaymentMode.vue";
 
 export default {
   components: {
     "done-icon": DoneIcon,
-    "app-header": Header
+    "app-header": Header,
+    "item-payment-mode": ItemPaymentMode
   },
 
   props: {
@@ -46,9 +53,9 @@ export default {
       headerTitle: "MESA "+this.tableNum,
       dishes: [
         { name: 'Filé de Frango Acebolado',
-          total: 26.60, left: 26.60, paying: 0, selected: false },
+          total: 22.60, left: 22.60, paying: 0, selected: false },
         { name: 'Berinjela Recheada com Feijão Branco',
-          total: 27.40, left: 27.40, paying: 0, selected: false },
+          total: 24.00, left: 24.00, paying: 0, selected: false },
         { name: 'Creme de Espinafre',
           total: 15.50, left: 15.50, paying: 0, selected: false },
         { name: 'Água sem Gás',
@@ -57,9 +64,10 @@ export default {
           total: 20.00, left: 20.00, paying: 0, selected: false },
         { name: 'Suco de Laranja',
           total:  5.50, left:  5.50, paying: 0, selected: false },
+        { name: 'Arroz Pilaf',
+          total: 18.95, left: 18.95, paying: 0, selected: false },
         { name: 'Pudim de Chocolate com Coco',
-          total:  8.90, left:  8.90, paying: 0, selected: false }],
-      total: 105.90,
+          total:  8.90, left:  8.90, paying: 0, selected: false }]
     };
   },
 
@@ -84,12 +92,21 @@ export default {
       var t = 0;
 
       for (var i = 0; i < this.dishes.length; i++)
-        if (this.dishes[i].selected == 0)
-          t += this.dishes[i].price;
-
-      console.log(t);
+        t += this.dishes[i].left;
 
       return t;
+    },
+
+    selectItem(ind) {
+      if (this.dishes[ind].left > 0)
+        this.dishes[ind].selected = true;
+    },
+
+    payItems() {
+      for (var i = 0; i < this.dishes.length; i++) {
+        this.dishes[i].left -= this.dishes[i].paying;
+        this.dishes[i].paying = 0;
+      }
     }
   }
 };
@@ -118,12 +135,12 @@ export default {
   justify-content: center;
   align-items: center;
 
-  margin: 1.5vh 10vw;
+  margin: 3vh 10vw;
   padding: 1.5vh 0;
   border-radius: 0.5vh;
 
   background-color: #EDAE61;
-  font-size: 6vh;
+  font-size: 7vh;
 }
 
 .list {
@@ -138,9 +155,9 @@ export default {
 .item {
   display: grid;
   grid-template-areas:
-    "name name name status";
+    "name name name status"
+    "edit edit edit edit";
   grid-auto-columns: 25%;
-
   
   padding: 1vh 1.5vw;
   margin-bottom: 1.5vh;
@@ -155,9 +172,9 @@ export default {
 
 .item-name {
   grid-area: name;
-  margin-right: 1vw;
+  margin-right: 2vw;
 
-  font-size: 3vh;
+  font-size: 2.2em;
 }
 
 .item-unpaid {
@@ -174,10 +191,10 @@ export default {
   flex-flow: column;
   justify-items: center;
 
-  padding: 0.5vh 0.5vw;
-  border-radius: 0.5vh;
+  padding: 0.5vh 0.6vw;
+  border-radius: 0.4em;
 
-  font-size: 2.5vh;
+  font-size: 2.4em;
 }
 
 .item-value.cost {
@@ -187,11 +204,32 @@ export default {
 .item-value.paying {
   margin-top: 1vh;
 
-  background-color: #BFB7B9;
+  background-color: #5EC4FF;
 }
 
-.list-item-paid {
-  grid-area: status
+.item-paid {
+  grid-area: status;
+  justify-self: end;
+  align-self: center;
+
+  margin-right: 5vw;
+  border-radius: 30em;
+  min-height: 1.1em;
+  max-height: 1.1em;
+  min-width: 1.1em;
+  max-width: 1.1em;
+
+  background-color: lightgreen;
+  font-size: 2.8em;
+  color: green;
+}
+
+.check-icon {
+  position: relative;
+}
+
+.item-payment {
+  grid-area: edit;
 }
 
 .pay-button {
@@ -201,14 +239,9 @@ export default {
   bottom: 0;
   width: 100%;
   padding: 0.5em;
-  vertical-align: middle;
 
   background-color: #CCE067;
   border: none;
   font-size: 5vh;
-}
-
-button:focus {
-  outline: 0;
 }
 </style>
