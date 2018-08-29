@@ -2,35 +2,35 @@
 <div class="item-edit">
   <div class="status">
     <span>Preço total do prato: R${{ dish.total.toFixed(2) }}</span>
-    <span>Total pago até agora: R${{ (dish.total-dish.left).toFixed(2) }}</span>
+    <span>Pagamentos até agora: R${{ (dish.total-dish.left).toFixed(2) }}</span>
   </div>
   
   <div class="payment">
-    <div class="pay-button" @click="pay(dish.left)">
+    <div class="button pay" @click="pay(dish.left)">
       PAGAR TUDO (R${{ dish.left.toFixed(2) }})
     </div>
     
-    <p>OU</p>
+    <p>ou</p>
 
     <div class="partial-pay-option">
       <p>Dividir a conta em </p>
       <input type="number" v-model="divisor" min="2" style="width: 8vw"/>
     </div>
-    <div class="pay-button" @click="pay(dividedValue())">
+    <div class="button pay" @click="pay(dividedValue())">
       PAGAR DIVIDIDO (R${{ dividedValue().toFixed(2) }})
     </div>
     
-    <p>OU</p>
+    <p>ou</p>
     
     <div class="partial-pay-option">
       <p>Pagar apenas </p>
       <input type="number" v-model="partial" min="0.00" max="dish.left" step="0.01" style="width: 15vw"/>
     </div>
-    <div class="pay-button" @click="pay(partialValue())">
+    <div class="button pay" @click="pay(partialValue())">
       PAGAR PARTE (R${{ partialValue().toFixed(2) }})
     </div>
     
-    <div class="cancel-button" @click="close()">CANCELAR</div>
+    <div class="button cancel" @click="close()">CANCELAR</div>
   </div>
 </div>
 </template>
@@ -83,17 +83,33 @@ export default {
 
 
 <style lang="scss" scoped>
+$normal-text-color: #434854;
+$pay-button-back-color: #80B3E5;
+$pay-button-font-color: #304A63;
+$cancel-button-back-color: #C9C8C3;
+$cancel-button-font-color: #686765;
+
+input {
+  font-size: 1em;
+  padding: 0;
+}
+
+p {
+  margin: 0.7vh;
+  text-align: center;
+  color: $normal-text-color;
+}
+
 .item-edit {
   display: grid;
   grid-template-areas:
     "info"
     "button";
 
-  margin: 1vh 4vw;
-  border-radius: 1vh;
-  padding: 2vh 3vw;
+  margin: 1vh 8vw;
+  padding: 0 3vw;
 
-  background-color: #E5DCDE;
+  font-size: 2em;
 }
 
 .status {
@@ -104,7 +120,7 @@ export default {
   justify-content: space-around;
   margin-bottom: 2vh;
 
-  font-size: 2.4em;
+  color: $normal-text-color;
 }
 
 .payment {
@@ -112,19 +128,27 @@ export default {
 
   display: flex;
   flex-flow: column;
-
-  font-size: 2.4em;
 }
 
-.pay-button {
+.button {
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
   padding: 1vh 1vw;
-  border-radius: 1vh;
+  border-radius: 0.1em;
+}
 
-  background-color: #5EC4FF;
+.button.pay {
+  background-color: $pay-button-back-color;
+  color: $pay-button-font-color;
+}
+
+.button.cancel {
+  margin-top: 2.5vh;
+
+  background-color: $cancel-button-back-color;
+  color: $cancel-button-font-color;
 }
 
 .partial-pay-option {
@@ -132,27 +156,5 @@ export default {
   flex-flow: row;
   margin-bottom: 1.5vh;
   justify-content: center;
-}
-
-.cancel-button {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1vh 1vw;
-  border-radius: 1vh;
-  margin-top: 2.5vh;
-
-  background-color: brown;
-}
-
-input {
-  font-size: 1em;
-  padding: 0;
-}
-
-p {
-  margin: 0.7vh;
-  text-align: center;
 }
 </style>

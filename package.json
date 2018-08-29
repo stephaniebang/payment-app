@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "npm-font-open-sans": "^1.1.0",
+    "roboto-fontface": "^0.10.0",
     "vue": "^2.5.11",
     "vue-material-design-icons": "^2.0.0"
   },

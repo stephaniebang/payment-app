@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import Home       from './components/Home.vue';
+  import Home from './components/Home.vue';
 
   export default{
     components: {
@@ -19,6 +19,8 @@
 </script>
 
 <style lang="scss">
+$app-back-color: #F7F7F7;
+
 html {
   height: 100%;
   width: 100%;
@@ -32,8 +34,8 @@ body {
   margin: 0;
   padding: 0;
 
-  font-family: 'Open Sans', sans-serif;
-  background-color: #F7F5F2;
+  //font-family: 'Open Sans', sans-serif;
+  background-color: $app-back-color;
 }
 
 button {

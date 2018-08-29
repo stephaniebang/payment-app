@@ -22,9 +22,9 @@
     </div>
   </div>
 
-  <button class="pay-button" @click="payItems">
+  <div class="pay-button" @click="payItems">
     PAGAR
-  </button>
+  </div>
 </div>
 </template>
 
@@ -123,6 +123,11 @@ export default {
 
 
 <style lang="scss" scoped>
+$item-name-color: #33353A;
+$price-left-color: #8E524B;
+$price-pay-color: #6B95BF;
+$pay-color: #7ECC8A;
+
 .wrapper {
   display: grid;
   grid-template-areas:
@@ -144,12 +149,12 @@ export default {
   justify-content: center;
   align-items: center;
 
-  margin: 3vh 10vw;
+  margin: 3.5vh 10vw 0 10vw;
   padding: 1.5vh 0;
   border-radius: 0.5vh;
 
-  background-color: #EDAE61;
-  font-size: 7vh;
+  font-size: 8em;
+  color: $price-left-color;
 }
 
 .list {
@@ -168,11 +173,9 @@ export default {
     "edit edit edit edit";
   grid-auto-columns: 25%;
   
-  padding: 1vh 1.5vw;
-  margin-bottom: 1.5vh;
-  border-radius: 1vh;
-
-  background-color: #EFE8EA;
+  padding: 1vh 0.5vw;
+  margin: 1vh 2vw 1.5vh 2vw;
+  border-bottom: 0.05em solid #CCC3C5;
 }
 
 .item:last-child {
@@ -184,6 +187,7 @@ export default {
   margin-right: 2vw;
 
   font-size: 2.2em;
+  color: $item-name-color;
 }
 
 .item-unpaid {
@@ -201,36 +205,34 @@ export default {
   justify-items: center;
 
   padding: 0.5vh 0.6vw;
-  border-radius: 0.4em;
+  border-radius: 0.7vh;
 
-  font-size: 2.4em;
+  font-size: 2.2em;
 }
 
 .item-value.cost {
-  background-color: #EDAE61;
+  color: $price-left-color;
 }
 
 .item-value.paying {
   margin-top: 1vh;
 
-  background-color: #5EC4FF;
+  color: $price-pay-color;
 }
 
 .item-paid {
   grid-area: status;
-  justify-self: end;
+  justify-self: center;
   align-self: center;
 
   margin-right: 5vw;
-  border-radius: 30em;
   min-height: 1.1em;
   max-height: 1.1em;
   min-width: 1.1em;
   max-width: 1.1em;
 
-  background-color: lightgreen;
   font-size: 2.8em;
-  color: green;
+  color: $pay-color;
 }
 
 .check-icon {
@@ -246,11 +248,12 @@ export default {
 
   position: fixed;
   bottom: 0;
+  display: flex;
+  justify-content: center;
   width: 100%;
-  padding: 0.5em;
+  padding: 2vh 8vw 2vh 0;
 
-  background-color: #CCE067;
-  border: none;
+  background-color: $pay-color;
   font-size: 5vh;
 }
 </style>

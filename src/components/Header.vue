@@ -46,11 +46,12 @@ export default{
 
   display: grid;
   grid-template-areas:
-    "title title title title icon";
+    "icon title";
 
   padding: 1vh;
 
-  background-color: #E85A4A;
+  font-size: 2em;
+  color: #91A2AA;
 }
 
 .app-header-title {
@@ -58,18 +59,13 @@ export default{
 
   display: flex;
   align-items: center;
-
-  font-size: 5vh;
 }
 
 .app-header-icon {
   grid-area: icon;
-  justify-self: end;
+  justify-self: begin;
   align-self: center;
 
-  margin-right: 2.5vw;
-
-  font-size: 2.8em;
-  color: brown;
+  margin-right: 2vw;
 }
 </style>
