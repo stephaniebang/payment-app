@@ -1,6 +1,6 @@
 <template>
 <div v-if="showList" class="wrapper">
-  <app-header title="MESAS"/>
+  <app-header title="MESAS" :isHome="showList"/>
 
   <div class="table-list">
     <div class="table" v-for="i in 16" @click="goToTableCheck(i)">
@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<table-check v-else :tableNum="selectedTable"/>
+<table-check v-else :tableNum="selectedTable" :isHome="showList" @goBack="backToHome"/>
 </template>
 
 
@@ -38,6 +38,10 @@ export default {
     goToTableCheck(table_n) {
       this.showList = false;
       this.selectedTable = table_n;
+    },
+
+    backToHome(value) {
+      this.showList = true;
     }
   }
 };

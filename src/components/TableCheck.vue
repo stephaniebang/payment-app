@@ -1,6 +1,6 @@
 <template>
 <div class="wrapper">
-  <app-header :title="headerTitle"/>
+  <app-header :title="headerTitle" :isHome="isHome" @goBack="goBack"/>
 
   <div class="total-remaining">R${{ calculateTotal().toFixed(2) }}</div>
 
@@ -45,6 +45,10 @@ export default {
   props: {
     tableNum: {
       type: Number
+    },
+
+    isHome: {
+      type: Boolean
     }
   },
 
@@ -107,6 +111,11 @@ export default {
         this.dishes[i].left -= this.dishes[i].paying;
         this.dishes[i].paying = 0;
       }
+    },
+
+    goBack(value) {
+      this.isHome = true;
+      this.$emit("goBack", this.isHome);
     }
   }
 };
