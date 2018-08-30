@@ -75,6 +75,8 @@ export default {
 
 
 <style lang="scss" scoped>
+$table-color: #33353A;
+
 .wrapper {
   display: grid;
   grid-template-areas:
@@ -105,17 +107,17 @@ export default {
     "number"
     "tab";
 
-  border-radius: 1vh;
-  margin: 2vh 1.5vw 0 0;
+  margin: 2vh 2vw 0 0;
   padding: 1em;
-  min-width: 15vw;
-  max-width: 15vw;
+  min-width: 12vw;
+  max-width: 12vw;
   min-height: 10vh;
   max-height: 10vh;
+  border-bottom: 0.05em solid #CCC3C5;
 
-  background-color: #B7A9A3;
-  font-size: 4vh;
+  font-size: 4em;
   text-align: center;
+  color: $table-color;
 }
 
 .table-number {
@@ -127,6 +129,6 @@ export default {
 .table-tab {
   grid-area: tab;
 
-  font-size: 2.5vh;
+  font-size: 0.5em;
 }
 </style>
