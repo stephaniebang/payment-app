@@ -1,8 +1,9 @@
 <template>
 <div class="item-edit">
   <div class="status">
-    <span>Preço total do prato: R${{ dish.total.toFixed(2) }}</span>
-    <span>Pagamentos até agora: R${{ (dish.total-dish.left).toFixed(2) }}</span>
+    <p>Preço total do prato: R${{ dish.total.toFixed(2) }}</p>
+    <p>Pagamentos feitos:</p>
+    <p v-for="val in dish.history">R${{ (val).toFixed(2) }}</p>
   </div>
   
   <div class="payment">
@@ -119,7 +120,7 @@ p {
   display: flex;
   flex-flow: column;
   justify-content: space-around;
-  margin-bottom: 2vh;
+  margin-bottom: 3vh;
 
   color: $normal-text-color;
 }

@@ -1,5 +1,5 @@
 <template>
-<div class="wrapper">
+<div class="tab-wrapper">
   <app-header :title="headerTitle" :isHome="isHome" @goBack="goBack"/>
 
   <div class="total-remaining">R${{ calculateTotal().toFixed(2) }}</div>
@@ -9,8 +9,12 @@
       <div class="item-name" @click="selectItem(i)">{{ dish.name }}</div>
       
       <div v-if="dish.left > 0" class="item-unpaid" @click="selectItem(i)">
-        <div class="item-value cost">R${{ dish.left.toFixed(2) }}</div>
-        <div v-if="dish.paying > 0" class="item-value paying">R${{ dish.paying.toFixed(2) }}</div>
+        <div class="item-value cost">
+          R${{ dish.left.toFixed(2) }}
+        </div>
+        <div v-if="dish.paying > 0" class="item-value paying">
+          R${{ dish.paying.toFixed(2) }}
+        </div>
       </div>
 
       <div v-else class="item-paid">
@@ -43,10 +47,12 @@ export default {
   },
 
   props: {
+    // current table
     table: {
       type: Object
     },
 
+    // flag that is true when view mode is table list and false when it is table tab
     isHome: {
       type: Boolean
     }
@@ -60,22 +66,8 @@ export default {
   },
 
   methods: {
-    itemSelected(ind) {
-      this.dishes[ind].selected = 1;
-    },
-
-    payItems() {
-      var paid = 0;
-
-      for (var i = 0; i < this.dishes.length; i++)
-        if (this.dishes[i].selected === 1) {
-          paid += this.dishes[i].price;
-          this.dishes[i].selected = 2;
-        }
-
-      this.total = this.calculateTotal();
-    },
-
+    /* Retun the total cost left
+     */
     calculateTotal() {
       var t = 0;
 
@@ -85,21 +77,32 @@ export default {
       return t;
     },
 
+    /* Set item as selected, triggering payment mode view only when the item
+     * wasn't fully paid
+     */
     selectItem(ind) {
       if (this.dishes[ind].left > 0)
         this.dishes[ind].selected = true;
     },
 
+    /* Pay all pending items, updating the total left cost and each item's left
+     * cost and payment history
+     */
     payItems() {
-      for (var i = 0; i < this.dishes.length; i++) {
-        this.dishes[i].left -= this.dishes[i].paying;
-        this.dishes[i].paying = 0;
-      }
+      for (var i = 0; i < this.dishes.length; i++)
+        if (this.dishes[i].paying > 0) {
+          this.dishes[i].left -= this.dishes[i].paying;
+          this.dishes[i].history.push(this.dishes[i].paying);
+          this.dishes[i].paying = 0;
+        }
 
+      // Updates parent component dish list
       this.table.dishes = this.dishes;
       this.$emit("registerPayment", this.table);
     },
 
+    /* Set view status to table list and triggers table list view
+     */
     goBack(value) {
       this.isHome = true;
       this.$emit("goBack", this.isHome);
@@ -116,7 +119,7 @@ $price-pay-color: #6B95BF;
 $pay-back-color: #7ECC8A;
 $pay-font-color: #3A5E3F;
 
-.wrapper {
+.tab-wrapper {
   display: grid;
   grid-template-areas:
     "header"
