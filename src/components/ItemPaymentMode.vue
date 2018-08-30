@@ -3,10 +3,10 @@
   <div class="status">
     <p>Preço total do prato: R${{ dish.total.toFixed(2) }}</p>
     <p>Pagamentos feitos:</p>
-    <p v-for="val in dish.history">R${{ (val).toFixed(2) }}</p>
+    <p v-for="(val, i) in dish.history">{{ i+1 }}. R${{ (val).toFixed(2) }}</p>
   </div>
   
-  <div class="payment">
+  <div class="payment" v-if="dish.left > 0">
     <div class="button pay" @click="pay(dish.left)">
       PAGAR TUDO (R${{ dish.left.toFixed(2) }})
     </div>
@@ -30,9 +30,9 @@
     <div class="button pay" @click="pay(partialValue())">
       PAGAR PARTE (R${{ partialValue().toFixed(2) }})
     </div>
-    
-    <div class="button cancel" @click="close()">CANCELAR</div>
   </div>
+
+  <div class="button close" @click="close()">FECHAR</div>
 </div>
 </template>
 
@@ -40,28 +40,35 @@
 <script>
 export default {
   props: [
-    'itemList', 'ind'
+    // Array of current table's dishes
+    'itemList',
+    // Index of current dish
+    'ind'
   ],
 
   data() {
     return {
+      // Current dish
       dish: this.itemList[this.ind],
+      // Divisor to equally divide the dish's left cost
       divisor: 2,
+      // Partial value of the dish's left cost
       partial: 0,
     };
   },
 
   methods: {
-    nome() {
-      return(this.dish.name);
-    },
-
+    /* Return the dish's left cost divided by the chosen divisor
+     */
     dividedValue() {
       if (this.divisor <= 0) return 0;
 
       return(this.dish.left/parseInt(this.divisor));
     },
 
+    /* Return the dish's chosen partial payment. It forces the payment to be a
+     * vaue between 0 and the dish's total left cost
+     */
     partialValue() {
       if (!this.partial || isNaN(this.partial)) this.partial = 0;
       if (this.partial > this.dish.left) this.partial = this.dish.left;
@@ -69,11 +76,15 @@ export default {
       return(parseFloat(this.partial));
     },
 
+    /* Set the item payment with the chosen method
+     */
     pay(value) {
       this.itemList[this.ind].paying = value;
       this.close();
     },
 
+    /* Set item as unselected, updating its payment mode in the parent component
+     */
     close() {
       this.itemList[this.ind].selected = false;
       this.$emit("itemUnselected", this.itemList);
@@ -105,8 +116,8 @@ p {
 .item-edit {
   display: grid;
   grid-template-areas:
-    "info"
-    "button";
+    "info   close"
+    "button button";
 
   margin: 1vh 8vw;
   padding: 0 3vw;
@@ -137,20 +148,28 @@ p {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  padding: 1vh 1vw;
-  border-radius: 0.1em;
 }
 
 .button.pay {
+  padding: 1vh 1vw;
+  border-radius: 0.1em;
+
   background-color: $pay-button-back-color;
   color: $pay-button-font-color;
 }
 
-.button.cancel {
-  margin-top: 2.5vh;
+.button.close {
+  grid-area: close;
+  justify-self: center;
+  align-self: center;
+
+  padding: 1vh 3vw;
+  border-radius: 0.1em;
+  margin-bottom: 3vh;
 
   background-color: $cancel-button-back-color;
   color: $cancel-button-font-color;
+  font-size: 1em;
 }
 
 .partial-pay-option {
