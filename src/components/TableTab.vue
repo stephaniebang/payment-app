@@ -1,33 +1,53 @@
 <template>
 <div class="tab-wrapper">
+  <!-- Header -->
   <app-header :title="headerTitle" :isHome="isHome" @goBack="goBack"/>
 
+  <!-- Total unpaid tab -->
   <div class="total-remaining">R${{ calculateTotal().toFixed(2) }}</div>
 
+  <!-- List of dishes -->
   <div class="list">
     <div class="item" v-for="(dish, i) in dishes">
+      <!-- Dish name -->
       <div class="item-name" @click="selectItem(i)">{{ dish.name }}</div>
       
+      <!-- Dish unpaid status or... -->
       <div v-if="dish.left > 0" class="item-unpaid" @click="selectItem(i)">
+        <!-- Dish total unpaid value -->
         <div class="item-value cost">
           R${{ dish.left.toFixed(2) }}
         </div>
+        <!-- Dish current payment setting -->
         <div v-if="dish.paying > 0" class="item-value paying">
           R${{ dish.paying.toFixed(2) }}
         </div>
       </div>
 
+      <!-- ... dish paid status -->
       <div v-else class="item-paid">
         <done-icon class="check-icon"/>
       </div>
 
+      <!-- Item payment edit mode -->
       <item-payment-mode v-if="dish.selected" class="item-payment"
        :itemList="dishes" :ind="i" @itemUnselected="dishes = $event"/>
     </div>
-  </div>
 
-  <div class="pay-button" @click="payItems">
-    PAGAR
+    <!-- Cancel payment button -->
+    <div v-if="calculateTotal() > 0" class="option-button cancel" @click="cancelPayment">
+      CANCELAR PAGAMENTOS
+    </div>
+      
+    <!-- Pay all items button -->
+    <div v-if="calculateTotal() > 0" class="option-button all" @click="payAll">
+      PAGAR TUDO (R${{ calculateTotal().toFixed(2) }})
+    </div>
+  </div>
+  
+  <!-- Pay all selected items button -->
+  <div v-if="calculateTotal() > 0" class="pay-button" @click="payItems">
+    PAGAR R${{ totalPayment().toFixed(2) }}
   </div>
 </div>
 </template>
@@ -81,8 +101,34 @@ export default {
      * wasn't fully paid
      */
     selectItem(ind) {
-      if (this.dishes[ind].left > 0)
-        this.dishes[ind].selected = true;
+      this.dishes[ind].selected = true;
+    },
+
+    /* Cancel all payments that were set
+     */
+    cancelPayment() {
+      for (var i = 0; i < this.dishes.length; i++)
+        this.dishes[i].paying = 0;
+    },
+
+    /* Make all items payments
+     */
+    payAll() {
+      for (var i = 0; i < this.dishes.length; i++) {
+        this.dishes[i].history.push(this.dishes[i].left);
+        this.dishes[i].left = 0
+      }
+    },
+
+    /* Return the sum of all payments being made
+     */
+    totalPayment() {
+      var total = 0;
+
+      for (var i = 0; i < this.dishes.length; i++)
+        total += this.dishes[i].paying;
+
+      return total;
     },
 
     /* Pay all pending items, updating the total left cost and each item's left
@@ -116,8 +162,12 @@ export default {
 $item-name-color: #33353A;
 $price-left-color: #8E524B;
 $price-pay-color: #6B95BF;
-$pay-back-color: #7ECC8A;
-$pay-font-color: #3A5E3F;
+$pay-part-back-color: #7ECC8A;
+$pay-part-font-color: #3A5E3F;
+$cancel-button-back-color: #C9C8C3;
+$cancel-button-font-color: #686765;
+$pay-all-back-color: #80B3E5;
+$pay-all-font-color: #304A63;
 
 .tab-wrapper {
   display: grid;
@@ -170,7 +220,7 @@ $pay-font-color: #3A5E3F;
 }
 
 .item:last-child {
-  margin-bottom: 10vh;
+  margin-bottom: 2vh;
 }
 
 .item-name {
@@ -223,7 +273,7 @@ $pay-font-color: #3A5E3F;
   max-width: 1.1em;
 
   font-size: 2.8em;
-  color: $pay-back-color;
+  color: $pay-part-back-color;
 }
 
 .check-icon {
@@ -234,6 +284,28 @@ $pay-font-color: #3A5E3F;
   grid-area: edit;
 }
 
+.option-button {
+  padding: 1vh 1vw;
+  margin: 1.5vh 0;
+  border-radius: 0.1em;
+
+  background-color: pink;
+  font-size: 3vh;
+  text-align: center;
+}
+
+.option-button.cancel {
+  background-color: $cancel-button-back-color;
+  color: $cancel-button-font-color;
+}
+
+.option-button.all {
+  margin-bottom: 10vh;
+
+  background-color: $pay-all-back-color;
+  color: $pay-all-font-color;
+}
+
 .pay-button {
   grid-area: button;
 
@@ -241,11 +313,11 @@ $pay-font-color: #3A5E3F;
   bottom: 0;
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: 100vw;
   padding: 2vh 8vw 2vh 0;
 
   font-size: 4vh;
-  background-color: $pay-back-color;
-  color: $pay-font-color;
+  background-color: $pay-part-back-color;
+  color: $pay-part-font-color;
 }
 </style>
