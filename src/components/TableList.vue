@@ -1,18 +1,29 @@
 <template>
+<!-- Show table list... -->
 <div v-if="showList" class="wrapper">
+  <!-- Header -->
   <app-header title="MESAS" :isHome="showList"/>
 
+  <!-- Table list -->
   <div class="table-list">
-    <div class="table" v-for="table in tableList" @click="goToTableCheck(table)">
+    <div class="table" v-for="(table, i) in tableList" @click="goToTableCheck(i)">
+      <!-- Table number -->
       <div class="table-number">{{ table.n }}</div>
 
+      <!-- Table tab left -->
       <div class="table-tab">
         R${{ tableTotal(table).toFixed(2) }}
+      </div>
+
+      <!-- Table payment status -->
+      <div class="table-status-total" v-if="table.dishes.length > 0">
+        <div class="table-status-paid" :style="{ width: getStatus(table)+'%' }"/>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ... or show table tab -->
 <table-tab-view v-else :table="selectedTable" :isHome="showList"
                 @registerPayment="updateTable" @goBack="backToHome"/>
 </template>
@@ -29,6 +40,7 @@ export default {
   },
 
   props: {
+    // Array of tables
     tableList: {
       type: Array
     }
@@ -36,12 +48,16 @@ export default {
 
   data() {
     return{
+      // Flag: true when view mode is table list and false when table tab
       showList: true,
+      // Table to be shown in table tab view mode
       selectedTable: null
     };
   },
 
   methods: {
+    /* Return the sum of a table's left costs
+     */
     tableTotal(table) {
       var total = 0;
 
@@ -51,19 +67,44 @@ export default {
       return total;
     },
 
-    goToTableCheck(table) {
-      this.showList = false;
-      this.selectedTable = table;
+    /* Return how much, in percentage, was already paid
+     */
+    getStatus(table) {
+      var t = 0;
+
+      for (var i = 0; i < table.dishes.length; i++)
+        t += table.dishes[i].total;
+
+      console.log(parseFloat(this.tableTotal(table)/t));
+      return (1-this.tableTotal(table)/t)*100;
     },
 
+    /* Set view mode as table tab and prepare selected table to be shown
+     */
+    goToTableCheck(ind) {
+      this.showList = false;
+      this.selectedTable = this.tableList[ind];
+
+      // Set table dish payment mode to false, so that when entering table tab view
+      // mode, only the dish table is visible
+      for (var i = 0; i < this.tableList[ind].dishes.length; i++)
+        this.tableList[ind].dishes[i].selected = false;
+    },
+
+    /* Set table list flag to true when coming back from table tab view mode,
+     * triggering table list view mode
+     */ 
     backToHome(value) {
       this.showList = true;
     },
 
+    /* Update table list item when payment is made in table tab view mode
+     */
     updateTable(value) {
       var n = value.n;
       var i = 0
 
+      // Find changed table in table list
       while (this.tableList[i].n != n) 
         i++;
 
@@ -76,6 +117,8 @@ export default {
 
 <style lang="scss" scoped>
 $table-color: #33353A;
+$status-back: #CCC3C5;
+$status-front: #AC7B84;
 
 .wrapper {
   display: grid;
@@ -114,7 +157,6 @@ $table-color: #33353A;
   max-width: 12vw;
   min-height: 10vh;
   max-height: 10vh;
-  border-bottom: 0.05em solid #CCC3C5;
 
   font-size: 4em;
   text-align: center;
@@ -131,5 +173,19 @@ $table-color: #33353A;
   grid-area: tab;
 
   font-size: 0.5em;
+}
+
+.table-status-total {
+  width: 100%;
+  height: 0.3vw;
+  margin-top: 1vw;
+
+  background-color: $status-back;
+}
+
+.table-status-paid {
+  height: 100%;
+
+  background-color: $status-front;
 }
 </style>
