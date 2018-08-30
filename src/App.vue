@@ -108,7 +108,7 @@ body {
   margin: 0;
   padding: 0;
 
-  font-family: Arial; 
+  font-family: 'Times new roman'; 
   background-color: $app-back-color;
 }
 
