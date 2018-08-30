@@ -75,7 +75,6 @@ export default {
       for (var i = 0; i < table.dishes.length; i++)
         t += table.dishes[i].total;
 
-      console.log(parseFloat(this.tableTotal(table)/t));
       return (1-this.tableTotal(table)/t)*100;
     },
 
