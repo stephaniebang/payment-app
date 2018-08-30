@@ -27,7 +27,7 @@
       </div>
 
       <!-- ... dish paid status -->
-      <div v-else class="item-paid">
+      <div v-else class="item-paid" @click="selectItem(i)">
         <done-icon class="check-icon"/>
       </div>
 
