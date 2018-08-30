@@ -1,6 +1,7 @@
 # Payment App
 
-> Pagamento de contas de restaurante
+App de pagamento de contas de restaurante feito em Vue.js com SCSS.
+
 
 ## Build Setup
 
