@@ -46,11 +46,14 @@ export default{
 
   display: grid;
   grid-template-areas:
-    "icon title";
+    ". icon title";
+  grid-template-columns: 3% 40% 57%;
 
-  padding: 1vh;
+  min-height: 8vh;
+  max-height: 8vh;
+  padding: 2vh;
 
-  font-size: 2em;
+  font-size: 4vh;
   color: #91A2AA;
 }
 
@@ -66,6 +69,6 @@ export default{
   justify-self: begin;
   align-self: center;
 
-  margin-right: 2vw;
+  text-align: left;
 }
 </style>
