@@ -1,18 +1,23 @@
 <template>
 <div class="item-edit">
-  <div class="status">
+  <!-- Item total value and payment history -->
+  <div class="status" @click="close()">
     <p>Preço total do prato: R${{ dish.total.toFixed(2) }}</p>
-    <p>Pagamentos feitos:</p>
-    <p v-for="(val, i) in dish.history">{{ i+1 }}. R${{ (val).toFixed(2) }}</p>
+    <p>Histórico de pagamentos:</p>
+    <p v-for="(val, i) in dish.history" class="history">{{ i+1 }}. R${{ (val).toFixed(2) }}</p>
+    <p v-if="dish.history.length === 0" class="history">Nenhum pagamento realizado</p>
   </div>
   
+  <!-- Item payment setting -->
   <div class="payment" v-if="dish.left > 0">
+    <!-- Full payment option -->
     <div class="button pay" @click="pay(dish.left)">
       PAGAR TUDO (R${{ dish.left.toFixed(2) }})
     </div>
     
     <p>ou</p>
 
+    <!-- Divided payment option -->
     <div class="partial-pay-option">
       <p>Dividir a conta em </p>
       <input type="number" v-model="divisor" min="2" style="width: 8vw"/>
@@ -23,6 +28,7 @@
     
     <p>ou</p>
     
+    <!-- Partial payment mode -->
     <div class="partial-pay-option">
       <p>Pagar apenas </p>
       <input type="number" v-model="partial" min="0.00" max="dish.left" step="0.01" style="width: 15vw"/>
@@ -30,9 +36,10 @@
     <div class="button pay" @click="pay(partialValue())">
       PAGAR PARTE (R${{ partialValue().toFixed(2) }})
     </div>
-  </div>
 
-  <div class="button close" @click="close()">FECHAR</div>
+    <!-- Close button -->
+    <div class="button close" @click="close()">FECHAR</div>
+  </div>
 </div>
 </template>
 
@@ -108,7 +115,7 @@ input {
 }
 
 p {
-  margin: 0.7vh;
+  margin: 0.4vh;
   text-align: center;
   color: $normal-text-color;
 }
@@ -116,13 +123,13 @@ p {
 .item-edit {
   display: grid;
   grid-template-areas:
-    "info   close"
-    "button button";
+    "info"
+    "button";
 
   margin: 1vh 8vw;
   padding: 0 3vw;
 
-  font-size: 2em;
+  font-size: 2.1em;
 }
 
 .status {
@@ -131,13 +138,20 @@ p {
   display: flex;
   flex-flow: column;
   justify-content: space-around;
-  margin-bottom: 3vh;
 
   color: $normal-text-color;
 }
 
+.history {
+  margin: 0;
+  
+  font-size: 0.9em;
+}
+
 .payment {
   grid-area: button;
+
+  margin-top: 2vh;
 
   display: flex;
   flex-flow: column;
@@ -148,28 +162,20 @@ p {
   flex-flow: column;
   align-items: center;
   justify-content: center;
+  padding: 1vh 1vw;
+  border-radius: 0.1em;
 }
 
 .button.pay {
-  padding: 1vh 1vw;
-  border-radius: 0.1em;
-
   background-color: $pay-button-back-color;
   color: $pay-button-font-color;
 }
 
 .button.close {
-  grid-area: close;
-  justify-self: center;
-  align-self: center;
-
-  padding: 1vh 3vw;
-  border-radius: 0.1em;
-  margin-bottom: 3vh;
+  margin-top: 1.5vh;
 
   background-color: $cancel-button-back-color;
   color: $cancel-button-font-color;
-  font-size: 1em;
 }
 
 .partial-pay-option {
