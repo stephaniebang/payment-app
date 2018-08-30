@@ -1,13 +1,13 @@
 <template>
-  <home :tableList="tables"/>
+  <table-list :tableList="tables"/>
 </template>
 
 <script>
-  import Home from './components/Home.vue';
+  import TableList from './components/TableList.vue';
 
   export default{
     components: {
-      'home': Home
+      'table-list': TableList
     },
 
     data() {
