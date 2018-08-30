@@ -3,17 +3,18 @@
   <app-header title="MESAS" :isHome="showList"/>
 
   <div class="table-list">
-    <div class="table" v-for="i in 16" @click="goToTableCheck(i)">
-      <div class="table-number">{{ i }}</div>
+    <div class="table" v-for="table in tableList" @click="goToTableCheck(table)">
+      <div class="table-number">{{ table.n }}</div>
 
       <div class="table-tab">
-        R${{ i*5 }},00
+        R${{ tableTotal(table).toFixed(2) }}
       </div>
     </div>
   </div>
 </div>
 
-<table-check v-else :tableNum="selectedTable" :isHome="showList" @goBack="backToHome"/>
+<table-check v-else :table="selectedTable" :isHome="showList"
+             @registerPayment="updateTable" @goBack="backToHome"/>
 </template>
 
 
@@ -27,21 +28,46 @@ export default {
     "app-header": Header
   },
 
+  props: {
+    tableList: {
+      type: Array
+    }
+  },
+
   data() {
     return{
       showList: true,
-      selectedTable: 0
+      selectedTable: null
     };
   },
 
   methods: {
-    goToTableCheck(table_n) {
+    tableTotal(table) {
+      var total = 0;
+
+      for (var i = 0; i < table.dishes.length; i++)
+        total += table.dishes[i].left;
+
+      return total;
+    },
+
+    goToTableCheck(table) {
       this.showList = false;
-      this.selectedTable = table_n;
+      this.selectedTable = table;
     },
 
     backToHome(value) {
       this.showList = true;
+    },
+
+    updateTable(value) {
+      var n = value.n;
+      var i = 0
+
+      while (this.tableList[i].n != n) 
+        i++;
+
+      this.tableList[i] = value;
     }
   }
 };
