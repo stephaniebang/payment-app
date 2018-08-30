@@ -92,6 +92,7 @@ $cancel-button-font-color: #686765;
 input {
   font-size: 1em;
   padding: 0;
+  color: $normal-text-color;
 }
 
 p {

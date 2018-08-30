@@ -85,6 +85,7 @@ $table-color: #33353A;
     "list"
     "list"
     "list";
+  grid-template-rows: 10%;
 
   height: 100%;
   width: 100%; 

@@ -113,7 +113,8 @@ export default {
 $item-name-color: #33353A;
 $price-left-color: #8E524B;
 $price-pay-color: #6B95BF;
-$pay-color: #7ECC8A;
+$pay-back-color: #7ECC8A;
+$pay-font-color: #3A5E3F;
 
 .wrapper {
   display: grid;
@@ -124,6 +125,7 @@ $pay-color: #7ECC8A;
     "list"
     "list"
     "button";
+  grid-template-rows: 10%;
 
   height: 100%;
   width: 100%;
@@ -136,8 +138,7 @@ $pay-color: #7ECC8A;
   justify-content: center;
   align-items: center;
 
-  margin: 3.5vh 10vw 0 10vw;
-  padding: 1.5vh 0;
+  margin: 0 10vw;
   border-radius: 0.5vh;
 
   font-size: 8em;
@@ -219,7 +220,7 @@ $pay-color: #7ECC8A;
   max-width: 1.1em;
 
   font-size: 2.8em;
-  color: $pay-color;
+  color: $pay-back-color;
 }
 
 .check-icon {
@@ -240,7 +241,8 @@ $pay-color: #7ECC8A;
   width: 100%;
   padding: 2vh 8vw 2vh 0;
 
-  background-color: $pay-color;
-  font-size: 5vh;
+  font-size: 4vh;
+  background-color: $pay-back-color;
+  color: $pay-font-color;
 }
 </style>

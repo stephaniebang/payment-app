@@ -49,11 +49,7 @@ export default{
     ". icon title";
   grid-template-columns: 3% 40% 57%;
 
-  min-height: 8vh;
-  max-height: 8vh;
-  padding: 2vh;
-
-  font-size: 4vh;
+  font-size: 2.2em;
   color: #91A2AA;
 }
 
