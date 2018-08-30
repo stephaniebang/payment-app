@@ -4,7 +4,7 @@
   <app-header :title="headerTitle" :isHome="isHome" @goBack="goBack"/>
 
   <!-- Total unpaid tab -->
-  <div class="total-remaining">R${{ calculateTotal().toFixed(2) }}</div>
+  <div class="total-remaining">R${{ getTotalLeft().toFixed(2) }}</div>
 
   <!-- List of dishes -->
   <div class="list">
@@ -13,14 +13,16 @@
       <div class="item-name" @click="selectItem(i)">{{ dish.name }}</div>
       
       <!-- Dish unpaid status or... -->
-      <div v-if="dish.left > 0" class="item-unpaid" @click="selectItem(i)">
+      <div v-if="dish.left > 0" class="item-unpaid">
         <!-- Dish total unpaid value -->
-        <div class="item-value cost">
+        <div class="item-value cost" @click="selectItem(i)">
           R${{ dish.left.toFixed(2) }}
         </div>
+
         <!-- Dish current payment setting -->
-        <div v-if="dish.paying > 0" class="item-value paying">
-          R${{ dish.paying.toFixed(2) }}
+        <div v-if="dish.paying > 0" class="item-value paying" @click="cancelPay(i)">
+          <span>R${{ dish.paying.toFixed(2) }}</span>
+          <span :style="{ marginLeft: '2vw', fontFamily: 'Arial', fontSize: '0.75em', paddingTop: '0.3vh' }">X</span>
         </div>
       </div>
 
@@ -34,20 +36,15 @@
        :itemList="dishes" :ind="i" @itemUnselected="dishes = $event"/>
     </div>
 
-    <!-- Cancel payment button -->
-    <div v-if="calculateTotal() > 0" class="option-button cancel" @click="cancelPayment">
-      CANCELAR PAGAMENTOS
-    </div>
-      
     <!-- Pay all items button -->
-    <div v-if="calculateTotal() > 0" class="option-button all" @click="payAll">
-      PAGAR TUDO (R${{ calculateTotal().toFixed(2) }})
+    <div v-if="getTotalLeft() > 0" class="option-button" @click="payAllLeft">
+      PAGAR TUDO (R${{ getTotalLeft().toFixed(2) }})
     </div>
   </div>
   
   <!-- Pay all selected items button -->
-  <div v-if="calculateTotal() > 0" class="pay-button" @click="payItems">
-    PAGAR R${{ totalPayment().toFixed(2) }}
+  <div v-if="getTotalLeft() > 0" class="pay-button" @click="payAllSelected">
+    PAGAR R${{ getTotalPaying().toFixed(2) }}
   </div>
 </div>
 </template>
@@ -88,41 +85,18 @@ export default {
   methods: {
     /* Retun the total cost left
      */
-    calculateTotal() {
-      var t = 0;
+    getTotalLeft() {
+      var total = 0;
 
       for (var i = 0; i < this.dishes.length; i++)
-        t += this.dishes[i].left;
+        total += this.dishes[i].left;
 
-      return t;
+      return total;
     },
-
-    /* Set item as selected, triggering payment mode view only when the item
-     * wasn't fully paid
-     */
-    selectItem(ind) {
-      this.dishes[ind].selected = true;
-    },
-
-    /* Cancel all payments that were set
-     */
-    cancelPayment() {
-      for (var i = 0; i < this.dishes.length; i++)
-        this.dishes[i].paying = 0;
-    },
-
-    /* Make all items payments
-     */
-    payAll() {
-      for (var i = 0; i < this.dishes.length; i++) {
-        this.dishes[i].history.push(this.dishes[i].left);
-        this.dishes[i].left = 0
-      }
-    },
-
+    
     /* Return the sum of all payments being made
      */
-    totalPayment() {
+    getTotalPaying() {
       var total = 0;
 
       for (var i = 0; i < this.dishes.length; i++)
@@ -131,20 +105,46 @@ export default {
       return total;
     },
 
+    /* Set item as selected, triggering payment mode view only when the item
+     * wasn't fully paid
+     */
+    selectItem(ind) {
+      this.dishes[ind].selected = !this.dishes[ind].selected;
+    },
+
+    /* Cancel payment for the given item
+     */
+    cancelPay(ind) {
+      this.dishes[ind].paying = 0;
+    },
+
+    /* Pay all items
+     */
+    payAllLeft() {
+      for (var i = 0; i < this.dishes.length; i++)
+        if (this.dishes[i].left > 0) 
+          this.payItem(i, this.dishes[i].left);
+    },
+
     /* Pay all pending items, updating the total left cost and each item's left
      * cost and payment history
      */
-    payItems() {
+    payAllSelected() {
       for (var i = 0; i < this.dishes.length; i++)
-        if (this.dishes[i].paying > 0) {
-          this.dishes[i].left -= this.dishes[i].paying;
-          this.dishes[i].history.push(this.dishes[i].paying);
-          this.dishes[i].paying = 0;
-        }
+        if (this.dishes[i].paying > 0) 
+          this.payItem(i, this.dishes[i].paying);
 
       // Updates parent component dish list
       this.table.dishes = this.dishes;
       this.$emit("registerPayment", this.table);
+    },
+
+    /* Pay item, given its index and the payment value
+     */
+    payItem(ind, payment) {
+      this.dishes[ind].history.push(payment);
+      this.dishes[ind].left -= payment;
+      this.dishes[ind].paying = 0;
     },
 
     /* Set view status to table list and triggers table list view
@@ -256,6 +256,8 @@ $pay-all-font-color: #304A63;
 }
 
 .item-value.paying {
+  display: flex;
+  flex-flow: row;
   margin-top: 1vh;
 
   color: $price-pay-color;
@@ -286,21 +288,11 @@ $pay-all-font-color: #304A63;
 
 .option-button {
   padding: 1vh 1vw;
-  margin: 1.5vh 0;
+  margin: 1.5vh 1.5vw 10vh 1.5vw;
   border-radius: 0.1em;
 
-  background-color: pink;
   font-size: 3vh;
   text-align: center;
-}
-
-.option-button.cancel {
-  background-color: $cancel-button-back-color;
-  color: $cancel-button-font-color;
-}
-
-.option-button.all {
-  margin-bottom: 10vh;
 
   background-color: $pay-all-back-color;
   color: $pay-all-font-color;
