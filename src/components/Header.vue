@@ -1,10 +1,10 @@
 <template>
-<div class="app-header">
-  <div class="app-header-title">
-    {{ title }}
+<div class="header">
+  <div class="title">
+    {{ headerTitle() }}
   </div>
 
-  <div v-if="!isHome" class="app-header-icon" @click="goBack">
+  <div v-if="tableIndex >= 0" class="back" @click="goBack">
     <back-icon class="back-icon"/>
   </div>
 </div>
@@ -15,7 +15,7 @@
 import "vue-material-design-icons/styles.css";
 import BackIcon from "vue-material-design-icons/ArrowLeft.vue";
 
-export default{
+export default {
   components: {
     "back-icon": BackIcon
   },
@@ -25,15 +25,20 @@ export default{
       type: String
     },
 
-    isHome: {
-      type: Boolean
+    tableIndex: {
+      type: Number
     }
   },
 
   methods: {
+    headerTitle() {
+      if (this.tableIndex < 0) return "MESAS";
+
+      return "MESA "+(this.tableIndex+1);
+    },
+
     goBack() {
-      this.isHome = true;
-      this.$emit("goBack", this.isHome);
+      this.$emit("goBack", -1);
     }
   }
 };
@@ -41,7 +46,9 @@ export default{
 
 
 <style lang="scss" scoped>
-.app-header {
+@import '~styles/reference.scss';
+
+.header {
   grid-area: header;
 
   display: grid;
@@ -49,22 +56,24 @@ export default{
     ". icon title";
   grid-template-columns: 3% 40% 57%;
 
+  padding: 0.5em;
+
   font-size: 2.2em;
-  color: #91A2AA;
-}
+  color: $header-text-color;
 
-.app-header-title {
-  grid-area: title;
+  > .title {
+    grid-area: title;
 
-  display: flex;
-  align-items: center;
-}
+    display: flex;
+    align-items: center;
+  }
 
-.app-header-icon {
-  grid-area: icon;
-  justify-self: begin;
-  align-self: center;
+  > .back {
+    grid-area: icon;
+    justify-self: begin;
+    align-self: center;
 
-  text-align: left;
+    text-align: left;
+  }
 }
 </style>
