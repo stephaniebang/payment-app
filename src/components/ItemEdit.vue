@@ -1,5 +1,5 @@
 <template>
-<div class="item-edit">
+<div class="itemEdit">
   <!-- Item total value and payment history -->
   <div class="status" @click="close()">
     <p>Preço total do prato: R${{ dish.total.toFixed(2) }}</p>
@@ -9,7 +9,7 @@
   </div>
   
   <!-- Item payment setting -->
-  <div class="payment" v-if="dish.left > 0">
+  <div class="setting" v-if="dish.left > 0">
     <!-- Full payment option -->
     <div class="button pay" @click="pay(dish.left)">
       PAGAR TUDO (R${{ dish.left.toFixed(2) }})
@@ -18,7 +18,7 @@
     <p>ou</p>
 
     <!-- Divided payment option -->
-    <div class="partial-pay-option">
+    <div class="option">
       <p>Dividir a conta em </p>
       <input type="number" v-model="divisor" min="2" style="width: 8vw"/>
     </div>
@@ -29,7 +29,7 @@
     <p>ou</p>
     
     <!-- Partial payment mode -->
-    <div class="partial-pay-option">
+    <div class="option">
       <p>Pagar apenas </p>
       <input type="number" v-model="partial" min="0.00" max="dish.left" step="0.01" style="width: 15vw"/>
     </div>
@@ -46,17 +46,15 @@
 
 <script>
 export default {
-  props: [
-    // Array of current table's dishes
-    'itemList',
-    // Index of current dish
-    'ind'
-  ],
+  props: {
+    // current dish
+    dish: {
+      type: Object
+    }
+  },
 
   data() {
     return {
-      // Current dish
-      dish: this.itemList[this.ind],
       // Divisor to equally divide the dish's left cost
       divisor: 2,
       // Partial value of the dish's left cost
@@ -86,15 +84,14 @@ export default {
     /* Set the item payment with the chosen method
      */
     pay(value) {
-      this.itemList[this.ind].paying = value;
+      this.$emit("payment", value);
       this.close();
     },
 
     /* Set item as unselected, updating its payment mode in the parent component
      */
     close() {
-      this.itemList[this.ind].selected = false;
-      this.$emit("itemUnselected", this.itemList);
+      this.$emit("itemUnselected", false);
     }
   }
 };
@@ -102,25 +99,11 @@ export default {
 
 
 <style lang="scss" scoped>
-$normal-text-color: #434854;
-$pay-button-back-color: #80B3E5;
-$pay-button-font-color: #304A63;
-$cancel-button-back-color: #C9C8C3;
-$cancel-button-font-color: #686765;
+@import '~styles/reference.scss';
 
-input {
-  font-size: 1em;
-  padding: 0;
-  color: $normal-text-color;
-}
+.itemEdit {
+  grid-area: edit;
 
-p {
-  margin: 0.4vh;
-  text-align: center;
-  color: $normal-text-color;
-}
-
-.item-edit {
   display: grid;
   grid-template-areas:
     "info"
@@ -130,58 +113,58 @@ p {
   padding: 0 3vw;
 
   font-size: 2.1em;
-}
 
-.status {
-  grid-area: info;
+  > .status {
+    grid-area: info;
 
-  display: flex;
-  flex-flow: column;
-  justify-content: space-around;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
 
-  color: $normal-text-color;
-}
+    color: $normal-text-color;
+  }
 
-.history {
-  margin: 0;
-  
-  font-size: 0.9em;
-}
+  > .status > .history {
+    margin: 0;
+    
+    font-size: 0.9em;
+  }
 
-.payment {
-  grid-area: button;
+  > .setting {
+    grid-area: button;
 
-  margin-top: 2vh;
+    margin-top: 2vh;
 
-  display: flex;
-  flex-flow: column;
-}
+    display: flex;
+    flex-flow: column;
+  }
 
-.button {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1vh 1vw;
-  border-radius: 0.1em;
-}
+  > .setting > .button {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1vh 1vw;
+    border-radius: 0.1em;
+  }
 
-.button.pay {
-  background-color: $pay-button-back-color;
-  color: $pay-button-font-color;
-}
+  > .setting > .button.pay {
+    background-color: $pay-button-back-color;
+    color: $pay-button-font-color;
+  }
 
-.button.close {
-  margin-top: 1.5vh;
+  > .setting > .option {
+    display: flex;
+    flex-flow: row;
+    margin-bottom: 1.5vh;
+    justify-content: center;
+  }
 
-  background-color: $cancel-button-back-color;
-  color: $cancel-button-font-color;
-}
+  > .setting > .button.close {
+    margin-top: 1.5vh;
 
-.partial-pay-option {
-  display: flex;
-  flex-flow: row;
-  margin-bottom: 1.5vh;
-  justify-content: center;
+    background-color: $cancel-button-back-color;
+    color: $cancel-button-font-color;
+  }
 }
 </style>
