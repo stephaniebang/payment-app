@@ -27,7 +27,7 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               data: `
-                @import "@/styles/variables.scss";
+                @import "@/styles/index.scss";
               `
             }
           }
@@ -79,7 +79,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
+      'styles': path.resolve(__dirname, './src/styles')
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
