@@ -50,41 +50,38 @@ export default {
     /* Retun the total cost left
      */
     getTotalLeft() {
-      var total = 0;
-
-      for (var i = 0; i < this.dishes.length; i++)
-        total += this.dishes[i].left;
-
-      return total;
+      return this.dishes.reduce((total, dish) => total+dish.left, 0);
     },
     
     /* Return the sum of all payments being made
      */
     getTotalPaying() {
-      var total = 0;
-
-      for (var i = 0; i < this.dishes.length; i++)
-        total += this.dishes[i].paying;
-
-      return total;
+      return this.dishes.reduce((total, dish) => total+dish.paying, 0);
     },
 
     /* Pay all items
      */
     payAllLeft() {
-      for (var i = 0; i < this.dishes.length; i++)
-        if (this.dishes[i].left > 0) 
-          this.payItem(i, this.dishes[i].left);
+      let i = 0;
+
+      this.dishes.map((dish) => {
+        if (dish.left > 0) this.payItem(i, dish.left);
+
+        i++;
+      });
     },
 
     /* Pay all pending items, updating the total left cost and each item's left
      * cost and payment history
      */
     payAllSelected() {
-      for (var i = 0; i < this.dishes.length; i++) {
-        if (this.dishes[i].paying > 0) 
-          this.payItem(i, this.dishes[i].paying);
-      }
+      let i = 0;
+
+      this.dishes.map((dish) => {
+        if (dish.paying > 0) this.payItem(i, dish.paying);
+
+        i++;
+      });
 
       // Updates parent component dish list
       this.table.dishes = this.dishes;

@@ -28,23 +28,15 @@ export default {
     /* Return the sum of a table's left costs
      */
     tableTotal(table) {
-      var total = 0;
-
-      for (var i = 0; i < table.dishes.length; i++)
-        total += table.dishes[i].left;
-
-      return total;
+      return table.dishes.reduce((total, dish) => total+dish.left, 0);
     },
     
     /* Return how much, in percentage, was already paid
      */
     getStatus(table) {
-      var t = 0;
-
-      for (var i = 0; i < table.dishes.length; i++)
-        t += table.dishes[i].total;
-
-      return (1-this.tableTotal(table)/t)*100;
+      return (1 - this.tableTotal(table)/table.dishes.reduce(
+        (total, dish) => total+dish.total, 0)
+      )*100;
     }
   }
 }
