@@ -125,8 +125,7 @@ export default {
     /* Update table list item when payment is made in table tab view mode
      */
     updateTable(value) {
-      var n = value.n;
-      var i = 0
+      let [n, i] = [value.n, 0];
 
       // Find changed table in table list
       while (this.tables[i].n != n) 
