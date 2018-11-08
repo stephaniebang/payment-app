@@ -34,7 +34,7 @@ export default {
     headerTitle() {
       if (this.tableIndex < 0) return "MESAS";
 
-      return "MESA "+(this.tableIndex+1);
+      return `MESA ${this.tableIndex+1}`;
     },
 
     goBack() {
@@ -57,9 +57,12 @@ export default {
   grid-template-columns: 3% 40% 57%;
 
   padding: 0.5em;
+  position: sticky;
+  top: 0;
 
   font-size: 2.2em;
   color: $header-text-color;
+  background-color: $app-back-color;
 
   > .title {
     grid-area: title;
