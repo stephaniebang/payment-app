@@ -32,8 +32,7 @@ export default {
     goToTab(ind) {
       // Set table dish payment mode to false, so that when entering table tab view
       // mode, only the dish table is visible
-      for (var i = 0; i < this.tableList[ind].dishes.length; i++)
-        this.tableList[ind].dishes[i].selected = false;
+      this.tableList[ind].dishes.map((dish) => dish.selected = false);
 
       this.$emit("goToTab", ind);
     }
