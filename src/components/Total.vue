@@ -1,18 +1,23 @@
 <template class="total">
   <div class="total">
-    R${{ value.toFixed(2) }}
+    R${{ tableTotal(tableIndex).toFixed(2) }}
   </div>
 </template>
 
+
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  props: {
-    value: {
-      type: Number
-    }
+  computed: {
+    ...mapGetters([
+      'tableTotal',
+      'tableIndex'
+    ])
   }
 }
 </script>
+
 
 <style lang="scss" scoped> 
 @import '~styles/reference.scss';

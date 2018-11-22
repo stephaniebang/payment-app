@@ -1,17 +1,19 @@
 <template>
 <div class="payAll">
-  PAGAR TUDO (R${{ total.toFixed(2) }})
+  PAGAR TUDO (R${{ tableTotal(tableIndex).toFixed(2) }})
 </div>
 </template>
 
 
 <script>
+import { mapGetters } from "vuex";
+
 export default{
-  props: {
-    // total value to pay
-    total: {
-      type: Number
-    }
+  computed: {
+    ...mapGetters([
+      "tableTotal",
+      "tableIndex"
+    ])
   }
 }
 </script>

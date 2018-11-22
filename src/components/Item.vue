@@ -1,30 +1,29 @@
 <template>
 <div class="item">
   <!-- Dish name -->
-  <div class="name" @click="changeItemSelection()">{{ dish.name }}</div>
-      
+  <div class="name" @click="changeItemSelection(ind)">{{ dish(ind).name }}</div>
+  
   <!-- Dish unpaid status or... -->
-  <div v-if="dish.left > 0" class="unpaid">
+  <div v-if="dish(ind).left > 0" class="unpaid">
     <!-- Dish total unpaid value -->
-    <div class="value" @click="changeItemSelection()">
-      R${{ dish.left.toFixed(2) }}
+    <div class="value" @click="changeItemSelection(ind)">
+      R${{ dish(ind).left.toFixed(2) }}
     </div>
 
     <!-- Dish current payment setting -->
-    <div v-if="dish.paying > 0" class="toPay" @click="cancelPay()">
-      <span>R${{ dish.paying.toFixed(2) }}</span>
+    <div v-if="dish(ind).paying > 0" class="toPay" @click="cancelPayment(ind)">
+      <span>R${{ dish(ind).paying.toFixed(2) }}</span>
       <span :style="{ marginLeft: '2vw', fontFamily: 'Arial', fontSize: '0.75em', paddingTop: '0.3vh' }">X</span>
     </div>
   </div>
 
   <!-- ... dish paid status -->
-  <div v-else class="paid" @click="changeItemSelection()">
+  <div v-else class="paid" @click="changeItemSelection(ind)">
     <done-icon class="icon"/>
   </div>
 
   <!-- Item payment edit mode -->
-  <item-edit v-if="dish.selected" :dish="dish" @itemUnselected="changeItemSelection"
-             @payment="setItemPayment"/>
+  <item-edit v-if="dish(ind).selected" ind="ind"/>
 </div>
 </template>
 
@@ -34,6 +33,8 @@ import "vue-material-design-icons/styles.css";
 import DoneIcon from "vue-material-design-icons/Check.vue";
 import ItemEdit from "./ItemEdit.vue";
 
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   components: {
     "done-icon": DoneIcon,
@@ -41,31 +42,22 @@ export default {
   },
 
   props: {
-    // dish
-    dish: {
-      type: Object
+    // dish index
+    ind: {
+      type: Number
     }
   },
 
+  computed: {
+    ...mapGetters([
+      "dish"
+    ])
+  },
+
   methods: {
-    /* Set item as selected, triggering payment mode view only when the item
-     * wasn't fully paid, or set it as unselected
-     */
-    changeItemSelection(ind) {
-      this.dish.selected = !this.dish.selected;
-    },
-
-    /* Update item when payment method is chosen in item edit mode
-     */
-    setItemPayment(value) {
-      this.dish.paying = value;
-    },
-
-    /* Cancel payment for the given item
-     */
-    cancelPay() {
-      this.dish.paying = 0;
-    },
+    ...mapActions([
+      "changeItemSelection"
+    ])
   }
 }
 </script>

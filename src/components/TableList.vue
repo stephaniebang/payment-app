@@ -1,7 +1,6 @@
 <template>
 <div class="list">
-  <item v-for="(t, i) in tableList" @click.native="goToTab(i)"
-        :table="t"/>
+  <item v-for="i in numTables" @click.native="updateTableIndex(i-1)" :ind="i-1"/>
 </div>
 </template>
 
@@ -9,33 +8,23 @@
 <script>
 import Table from "./Table.vue";
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   components: {
     "item": Table
   },
 
-  props: {
-    // Array of tables
-    tableList: {
-      type: Array
-    },
-
-    // Index of the table to be shown in table tab view mode
-    tableIndex: {
-      type: Number
-    }
+  methods: {
+    ...mapActions([
+      'updateTableIndex'
+    ])
   },
 
-  methods: {
-    /* Set view mode as table tab and prepare selected table to be shown
-     */
-    goToTab(ind) {
-      // Set table dish payment mode to false, so that when entering table tab view
-      // mode, only the dish table is visible
-      this.tableList[ind].dishes.map((dish) => dish.selected = false);
-
-      this.$emit("goToTab", ind);
-    }
+  computed: {
+    ...mapGetters([
+      'numTables'
+    ])
   }
 };
 </script>

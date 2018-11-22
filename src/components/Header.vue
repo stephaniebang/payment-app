@@ -1,10 +1,11 @@
 <template>
 <div class="header">
   <div class="title">
-    {{ headerTitle() }}
+    <span v-if="tableIndex < 0">MESAS</span>
+    <span v-else>MESA {{ tableIndex+1 }}</span>
   </div>
 
-  <div v-if="tableIndex >= 0" class="back" @click="goBack">
+  <div v-if="tableIndex >= 0" class="back" @click="updateTableIndex(-1)">
     <back-icon class="back-icon"/>
   </div>
 </div>
@@ -15,31 +16,23 @@
 import "vue-material-design-icons/styles.css";
 import BackIcon from "vue-material-design-icons/ArrowLeft.vue";
 
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   components: {
     "back-icon": BackIcon
   },
 
-  props: {
-    title: {
-      type: String
-    },
-
-    tableIndex: {
-      type: Number
-    }
+  methods: {
+    ...mapActions([
+      'updateTableIndex'
+    ])
   },
 
-  methods: {
-    headerTitle() {
-      if (this.tableIndex < 0) return "MESAS";
-
-      return `MESA ${this.tableIndex+1}`;
-    },
-
-    goBack() {
-      this.$emit("goBack", -1);
-    }
+  computed: {
+    ...mapGetters([
+      'tableIndex'
+    ])
   }
 };
 </script>

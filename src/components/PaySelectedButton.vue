@@ -1,17 +1,19 @@
 <template>
 <div class="paySelected">
-  PAGAR R${{ total.toFixed(2) }}
+  PAGAR R${{ tablePaying(tableIndex).toFixed(2) }}
 </div>
 </template>
 
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  props: {
-    // Total value of the selected items
-    total: {
-      type: Number
-    }
+  computed: {
+    ...mapGetters([
+      'tablePaying',
+      'tableIndex'
+    ])
   }
 }
 </script>
