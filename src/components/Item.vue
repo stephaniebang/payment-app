@@ -23,7 +23,7 @@
   </div>
 
   <!-- Item payment edit mode -->
-  <item-edit v-if="dish(ind).selected" ind="ind"/>
+  <item-edit v-if="dish(ind).selected" :ind="ind"/>
 </div>
 </template>
 
