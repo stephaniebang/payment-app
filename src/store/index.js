@@ -140,6 +140,12 @@ export const store = new Vuex.Store({
     cancelPayment: (state, ind) => {
       state.tables[state.tableIndex].dishes[ind].paying = 0;
     },
+
+    /* Set the item payment to the given value
+     */
+    updatePaymentValue: (state, arr) => {
+      state.tables[state.tableIndex].dishes[arr[0]].paying = arr[1];
+    }
   },
 
   actions: {
@@ -161,6 +167,10 @@ export const store = new Vuex.Store({
 
     cancelPayment: ({ commit }, ind) => {
       commit("cancelPayment", ind);
+    },
+
+    updatePaymentValue: ({ commit }, arr) => {
+      commit("updatePaymentValue", arr);
     }
   },
   
