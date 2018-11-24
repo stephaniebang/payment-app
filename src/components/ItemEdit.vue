@@ -2,17 +2,19 @@
 <div class="itemEdit">
   <!-- Item total value and payment history -->
   <div class="status" @click="close()">
-    <p>Preço total do prato: R${{ dish.total.toFixed(2) }}</p>
+    <p>Preço total do prato: R${{ dish(ind).total.toFixed(2) }}</p>
     <p>Histórico de pagamentos:</p>
-    <p v-for="(val, i) in dish.history" class="history">{{ i+1 }}. R${{ (val).toFixed(2) }}</p>
-    <p v-if="dish.history.length === 0" class="history">Nenhum pagamento realizado</p>
+    <p v-for="(val, i) in dish(ind).history" class="history">
+      {{ i+1 }}. R${{ (val).toFixed(2) }}
+    </p>
+    <p v-if="dish(ind).history.length === 0" class="history">Nenhum pagamento realizado</p>
   </div>
   
   <!-- Item payment setting -->
-  <div class="setting" v-if="dish.left > 0">
+  <div class="setting" v-if="dish(ind).left > 0">
     <!-- Full payment option -->
-    <div class="button pay" @click="pay(dish.left)">
-      PAGAR TUDO (R${{ dish.left.toFixed(2) }})
+    <div class="button pay" @click="pay(dish(ind).left)">
+      PAGAR TUDO (R${{ dish(ind).left.toFixed(2) }})
     </div>
     
     <p>ou</p>
@@ -38,18 +40,20 @@
     </div>
 
     <!-- Close button -->
-    <div class="button close" @click="close()">FECHAR</div>
+    <div class="button close" @click="changeItemSelection(ind)">FECHAR</div>
   </div>
 </div>
 </template>
 
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   props: {
-    // current dish
-    dish: {
-      type: Object
+    // dish index
+    ind: {
+      type: Number
     }
   },
 
@@ -62,13 +66,24 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters([
+      "dish"
+    ])
+  },
+
   methods: {
+    ...mapActions([
+      "changeItemSelection",
+      "updatePaymentValue"
+    ]),
+
     /* Return the dish's left cost divided by the chosen divisor
      */
     dividedValue() {
       if (this.divisor <= 0) return 0;
 
-      return(this.dish.left/parseInt(this.divisor));
+      return(this.dish(this.ind).left/parseInt(this.divisor));
     },
 
     /* Return the dish's chosen partial payment. It forces the payment to be a
@@ -76,22 +91,18 @@ export default {
      */
     partialValue() {
       if (!this.partial || isNaN(this.partial)) this.partial = 0;
-      if (this.partial > this.dish.left) this.partial = this.dish.left;
+      if (this.partial > this.dish(this.ind).left) this.partial = this.dish(this.ind).left;
       
       return(parseFloat(this.partial));
     },
 
-    /* Set the item payment with the chosen method
-     */
+    /* Set item payment and close item edit mode */
     pay(value) {
-      this.$emit("payment", value);
-      this.close();
-    },
-
-    /* Set item as unselected, updating its payment mode in the parent component
-     */
-    close() {
-      this.$emit("itemUnselected", false);
+      this.updatePaymentValue([this.ind, value]);
+      this.changeItemSelection(this.ind);
+      console.log(this.dish(this.ind));
+      console.log("valor: "+value);
+      console.log("left: "+this.dish(this.ind).paying);
     }
   }
 };
@@ -99,7 +110,7 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '~styles/reference.scss';
+  @import '~styles/reference.scss';
 
 .itemEdit {
   grid-area: edit;
