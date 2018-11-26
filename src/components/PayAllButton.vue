@@ -1,19 +1,26 @@
 <template>
-<div class="payAll">
+<div class="payAll" @click="pay()">
   PAGAR TUDO (R${{ tableTotal(tableIndex).toFixed(2) }})
 </div>
 </template>
 
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import * as types from "../store/types"
 
 export default{
   computed: {
-    ...mapGetters([
-      "tableTotal",
-      "tableIndex"
-    ])
+    ...mapGetters({
+      tableTotal: types.TABLE_TOTAL,
+      tableIndex: types.INDEX
+    })
+  },
+  
+  methods: {
+    ...mapActions({
+      pay: types.PAY_LEFT,
+    })
   }
 }
 </script>
