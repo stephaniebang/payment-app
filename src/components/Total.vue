@@ -7,13 +7,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+import * as types from "../store/types"
 
 export default {
   computed: {
-    ...mapGetters([
-      'tableTotal',
-      'tableIndex'
-    ])
+    ...mapGetters({
+      tableTotal: types.TABLE_TOTAL,
+      tableIndex: types.INDEX
+    })
   }
 }
 </script>

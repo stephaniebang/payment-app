@@ -8,11 +8,11 @@
     <item v-for="i in numDishes(tableIndex)" :ind="i-1"/>
 
     <!-- Pay all items button -->
-    <all-button v-if="tableTotal(tableIndex) > 0" @click.native="payAllLeft(tableIndex)"/>
+    <all-button v-if="tableTotal(tableIndex) > 0"/>
   </div>
   
   <!-- Pay all selected items button -->
-  <selected-button v-if="tableTotal(tableIndex) > 0" @click.native="payAllSelected(tableIndex)"/>
+  <selected-button v-if="tableTotal(tableIndex) > 0"/>
 </div>
 </template>
 
@@ -23,7 +23,8 @@ import Item              from "./Item.vue";
 import PayAllButton      from "./PayAllButton.vue";
 import PaySelectedButton from "./PaySelectedButton.vue";
 
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
+import * as types from "../store/types";
 
 export default {
   components: {
@@ -34,18 +35,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "numDishes",
-      "tableTotal",
-      "tableIndex"
-    ])
-  },
-
-  methods: {
-    ...mapActions([
-      "payAllLeft",
-      "payAllSelected"
-    ])
+    ...mapGetters({
+      numDishes:  types.NUMBER_DISHES,
+      tableTotal: types.TABLE_TOTAL,
+      tableIndex: types.INDEX
+    })
   }
 };
 </script>

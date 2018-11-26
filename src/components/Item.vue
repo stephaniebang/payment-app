@@ -34,6 +34,7 @@ import DoneIcon from "vue-material-design-icons/Check.vue";
 import ItemEdit from "./ItemEdit.vue";
 
 import { mapGetters, mapActions } from "vuex";
+import * as types from "../store/types"
 
 export default {
   components: {
@@ -49,15 +50,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "dish"
-    ])
+    ...mapGetters({
+      dish: types.DISH
+    })
   },
 
   methods: {
-    ...mapActions([
-      "changeItemSelection"
-    ])
+    ...mapActions({
+      changeItemSelection: types.UPDATE_ITEM_SELECTION
+    })
   }
 }
 </script>

@@ -15,6 +15,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import * as types from "../store/types"
 
 export default {
   props: {
@@ -25,12 +26,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'numDishes',
-      'tableNumber',
-      'tableStatus',
-      'tableTotal'
-    ])
+    ...mapGetters({
+      numDishes:   types.NUMBER_DISHES,
+      tableNumber: types.TABLE_N,
+      tableStatus: types.TABLE_STATUS,
+      tableTotal:  types.TABLE_TOTAL
+    })
   }
 }
 </script>

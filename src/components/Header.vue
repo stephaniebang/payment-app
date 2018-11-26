@@ -17,22 +17,23 @@ import "vue-material-design-icons/styles.css";
 import BackIcon from "vue-material-design-icons/ArrowLeft.vue";
 
 import { mapGetters, mapActions } from "vuex";
+import * as types from "../store/types"
 
 export default {
   components: {
     "back-icon": BackIcon
   },
 
-  methods: {
-    ...mapActions([
-      'updateTableIndex'
-    ])
+  computed: {
+    ...mapGetters({
+      tableIndex: types.INDEX
+    })
   },
 
-  computed: {
-    ...mapGetters([
-      'tableIndex'
-    ])
+  methods: {
+    ...mapActions({
+      updateTableIndex: types.UPDATE_INDEX
+    })
   }
 };
 </script>

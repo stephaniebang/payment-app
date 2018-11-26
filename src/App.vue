@@ -18,6 +18,7 @@ import TableTab  from "./components/TableTab.vue";
 import Header    from "./components/Header.vue";
 
 import { mapGetters } from "vuex";
+import * as types from "./store/types";
 
 export default {
   components: {
@@ -27,9 +28,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'tableIndex'
-    ])
+    ...mapGetters({
+      tableIndex: types.INDEX
+    })
   }
 };
 </script>

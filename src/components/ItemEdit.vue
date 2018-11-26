@@ -48,6 +48,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import * as types from "../store/types"
 
 export default {
   props: {
@@ -67,16 +68,16 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "dish"
-    ])
+    ...mapGetters({
+      dish: types.DISH
+    })
   },
 
   methods: {
-    ...mapActions([
-      "changeItemSelection",
-      "updatePaymentValue"
-    ]),
+    ...mapActions({
+      changeItemSelection: types.UPDATE_ITEM_SELECTION,
+      updatePaymentValue:  types.UPDATE_ITEM_PAYMENT
+    }),
 
     /* Return the dish's left cost divided by the chosen divisor
      */
@@ -98,11 +99,8 @@ export default {
 
     /* Set item payment and close item edit mode */
     pay(value) {
-      this.updatePaymentValue([this.ind, value]);
+      this.updatePaymentValue({ ind: this.ind, value: value });
       this.changeItemSelection(this.ind);
-      console.log(this.dish(this.ind));
-      console.log("valor: "+value);
-      console.log("left: "+this.dish(this.ind).paying);
     }
   }
 };

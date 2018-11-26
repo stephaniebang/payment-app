@@ -9,6 +9,7 @@
 import Table from "./Table.vue";
 
 import { mapActions, mapGetters } from "vuex";
+import * as types from "../store/types"
 
 export default {
   components: {
@@ -16,15 +17,15 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'updateTableIndex'
-    ])
+    ...mapActions({
+      updateTableIndex: types.UPDATE_INDEX
+    })
   },
 
   computed: {
-    ...mapGetters([
-      'numTables'
-    ])
+    ...mapGetters({
+      numTables: types.NUMBER_TABLES
+    })
   }
 };
 </script>

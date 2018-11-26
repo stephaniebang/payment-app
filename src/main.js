@@ -3,7 +3,7 @@ import "vue-material-design-icons/styles.css"
 import Vue from 'vue'
 import App from './App.vue'
 
-import { store } from './store/index';
+import { store } from './store/store';
 
 new Vue({
   el: '#app',
