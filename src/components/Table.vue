@@ -1,43 +1,37 @@
 <template>
 <div class="table">
   <!-- Table number -->
-  <div class="number">{{ table.n }}</div>
+  <div class="number">{{ tableNumber(ind) }}</div>
 
   <!-- Table tab left -->
-  <div class="tab">
-    R${{ tableTotal(table).toFixed(2) }}
-  </div>
+  <div class="tab">R${{ tableTotal(ind).toFixed(2) }}</div>
 
   <!-- Table payment status -->
-  <div class="status-total" v-if="table.dishes.length > 0">
-    <div class="paid" :style="{ width: getStatus(table)+'%' }"/>
+  <div class="status-total" v-if="numDishes(ind) > 0">
+    <div class="paid" :style="{ width: tableStatus(ind)+'%' }"/>
   </div>
 </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import * as types from "../store/types"
+
 export default {
   props: {
-    // table info
-    table: {
-      type: Object
+    // Table index
+    ind: {
+      type: Number
     }
   },
 
-  methods: {
-    /* Return the sum of a table's left costs
-     */
-    tableTotal(table) {
-      return table.dishes.reduce((total, dish) => total+dish.left, 0);
-    },
-    
-    /* Return how much, in percentage, was already paid
-     */
-    getStatus(table) {
-      return (1 - this.tableTotal(table)/table.dishes.reduce(
-        (total, dish) => total+dish.total, 0)
-      )*100;
-    }
+  computed: {
+    ...mapGetters({
+      numDishes:   types.NUMBER_DISHES,
+      tableNumber: types.TABLE_N,
+      tableStatus: types.TABLE_STATUS,
+      tableTotal:  types.TABLE_TOTAL
+    })
   }
 }
 </script>

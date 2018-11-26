@@ -1,20 +1,18 @@
 <template>
 <div class="tab">
   <!-- Total unpaid tab -->
-  <total-value :value="getTotalLeft()" style="{ gridArea: 'total' }"/>
+  <total-value style="{ gridArea: 'total' }"/>
 
   <!-- List of dishes -->
   <div class="list">
-    <item v-for="(dish, i) in dishes" :dish="dish"/>
+    <item v-for="i in numDishes(tableIndex)" :ind="i-1"/>
 
     <!-- Pay all items button -->
-    <all-button v-if="getTotalLeft() > 0" @click.native="payAllLeft"
-                :total="getTotalLeft()"/>
+    <all-button v-if="tableTotal(tableIndex) > 0"/>
   </div>
   
   <!-- Pay all selected items button -->
-  <selected-button v-if="getTotalLeft() > 0" @click.native="payAllSelected"
-                   :total="getTotalPaying()"/>
+  <selected-button v-if="tableTotal(tableIndex) > 0"/>
 </div>
 </template>
 
@@ -25,6 +23,9 @@ import Item              from "./Item.vue";
 import PayAllButton      from "./PayAllButton.vue";
 import PaySelectedButton from "./PaySelectedButton.vue";
 
+import { mapGetters } from "vuex";
+import * as types from "../store/types";
+
 export default {
   components: {
     "total-value": Total,
@@ -33,68 +34,12 @@ export default {
     "selected-button": PaySelectedButton
   },
 
-  props: {
-    // current table
-    table: {
-      type: Object
-    }
-  },
-
-  data() {
-    return {
-      dishes: this.table.dishes
-    };
-  },
-
-  methods: {
-    /* Retun the total cost left
-     */
-    getTotalLeft() {
-      return this.dishes.reduce((total, dish) => total+dish.left, 0);
-    },
-    
-    /* Return the sum of all payments being made
-     */
-    getTotalPaying() {
-      return this.dishes.reduce((total, dish) => total+dish.paying, 0);
-    },
-
-    /* Pay all items
-     */
-    payAllLeft() {
-      let i = 0;
-
-      this.dishes.map((dish) => {
-        if (dish.left > 0) this.payItem(i, dish.left);
-
-        i++;
-      });
-    },
-
-    /* Pay all pending items, updating the total left cost and each item's left
-     * cost and payment history
-     */
-    payAllSelected() {
-      let i = 0;
-
-      this.dishes.map((dish) => {
-        if (dish.paying > 0) this.payItem(i, dish.paying);
-
-        i++;
-      });
-
-      // Updates parent component dish list
-      this.table.dishes = this.dishes;
-      this.$emit("registerPayment", this.table);
-    },
-
-    /* Pay item, given its index and the payment value
-     */
-    payItem(ind, payment) {
-      this.dishes[ind].history.push(payment);
-      this.dishes[ind].left -= payment;
-      this.dishes[ind].paying = 0;
-    }
+  computed: {
+    ...mapGetters({
+      numDishes:  types.NUMBER_DISHES,
+      tableTotal: types.TABLE_TOTAL,
+      tableIndex: types.INDEX
+    })
   }
 };
 </script>

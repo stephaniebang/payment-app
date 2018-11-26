@@ -1,17 +1,26 @@
 <template>
-<div class="paySelected">
-  PAGAR R${{ total.toFixed(2) }}
+<div class="paySelected" @click="pay()">
+  PAGAR R${{ tablePaying(tableIndex).toFixed(2) }}
 </div>
 </template>
 
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import * as types from "../store/types"
+
 export default {
-  props: {
-    // Total value of the selected items
-    total: {
-      type: Number
-    }
+  computed: {
+    ...mapGetters({
+      tablePaying: types.TABLE_PAYING,
+      tableIndex:  types.INDEX
+    })
+  },
+
+  methods: {
+    ...mapActions({
+      pay: types.PAY_SELECTED,
+    })
   }
 }
 </script>
