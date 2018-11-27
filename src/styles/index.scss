@@ -25,11 +25,37 @@ button {
 input {
   font-size: 1em;
   padding: 0;
+
   color: $normal-text-color;
 }
 
 p {
   margin: 0.4vh;
   text-align: center;
+  
+  font-size: 2em;
   color: $normal-text-color;
+}
+
+input {
+  font-size: 2em;
+}
+
+.header {
+  background-color: $app-back-color;
+}
+
+.app {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "body"
+    "body"
+    "body"
+    "body"
+    "body";
+  grid-template-rows: 10%;
+
+  height: 100%;
+  width: 100%;
 }

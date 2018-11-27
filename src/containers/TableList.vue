@@ -1,12 +1,14 @@
 <template>
 <div class="list">
-  <item v-for="i in numTables" @click.native="updateTableIndex(i-1)" :ind="i-1"/>
+  <item v-for="i in numTables" @click.native="updateTableIndex(i-1)"
+   :n="tableNumber(i-1)" :total="tableTotal(i-1)" :dishes="numDishes(i-1)"
+   :perc="tableStatus(i-1)"/>
 </div>
 </template>
 
 
 <script>
-import Table from "./Table.vue";
+import Table from "../components/Table.vue";
 
 import { mapActions, mapGetters } from "vuex";
 import * as types from "../store/types"
@@ -24,7 +26,11 @@ export default {
 
   computed: {
     ...mapGetters({
-      numTables: types.NUMBER_TABLES
+      numTables:   types.NUMBER_TABLES,
+      numDishes:   types.NUMBER_DISHES,
+      tableNumber: types.TABLE_N,
+      tableStatus: types.TABLE_STATUS,
+      tableTotal:  types.TABLE_TOTAL
     })
   }
 };

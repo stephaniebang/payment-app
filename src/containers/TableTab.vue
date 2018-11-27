@@ -1,7 +1,7 @@
 <template>
 <div class="tab">
   <!-- Total unpaid tab -->
-  <total-value style="{ gridArea: 'total' }"/>
+  <total-tab :value="tableTotal(tableIndex)"/>
 
   <!-- List of dishes -->
   <div class="list">
@@ -18,19 +18,19 @@
 
 
 <script>
-import Total             from "./Total.vue";
-import Item              from "./Item.vue";
-import PayAllButton      from "./PayAllButton.vue";
-import PaySelectedButton from "./PaySelectedButton.vue";
+import Item              from "./Dish.vue";
+import TotalTab          from "../components/TotalTab.vue";
+import PayAllButton      from "../components/PayAllButton.vue";
+import PaySelectedButton from "../components/PaySelectedButton.vue";
 
 import { mapGetters } from "vuex";
 import * as types from "../store/types";
 
 export default {
   components: {
-    "total-value": Total,
-    "item": Item,
-    "all-button": PayAllButton,
+    "total-tab":       TotalTab,
+    "item":            Item,
+    "all-button":      PayAllButton,
     "selected-button": PaySelectedButton
   },
 

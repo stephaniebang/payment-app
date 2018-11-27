@@ -31,7 +31,7 @@ export default{
 
 .payAll {
   padding: 1vh 1vw;
-  margin: 1.5vh 1.5vw 10vh 1.5vw;
+  margin: 1.5vh 1.5vw;
   border-radius: 0.1em;
 
   font-size: 3vh;

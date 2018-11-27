@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <!-- Header -->
-    <app-header/>
+    <app-header class="header"/>
 
     <!-- Table list -->
     <table-list v-if="tableIndex < 0"/>
@@ -13,9 +13,9 @@
 
 
 <script>
-import TableList from './components/TableList.vue';
-import TableTab  from "./components/TableTab.vue";
-import Header    from "./components/Header.vue";
+import TableList from './containers/TableList.vue';
+import TableTab  from "./containers/TableTab.vue";
+import Header    from "./containers/Header.vue";
 
 import { mapGetters } from "vuex";
 import * as types from "./store/types";
@@ -36,19 +36,4 @@ export default {
 </script>
 
 
-<style src="./styles/index.scss" lang="scss">
-.app {
-  display: grid;
-  grid-template-areas:
-    "header"
-    "body"
-    "body"
-    "body"
-    "body"
-    "body";
-  grid-template-rows: 10%;
-
-  height: 100%;
-  width: 100%;
-}
-</style>
+<style src="./styles/index.scss" lang="scss"/>
