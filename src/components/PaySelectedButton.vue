@@ -37,7 +37,7 @@ export default {
   display: flex;
   justify-content: center;
   width: 100vw;
-  padding: 2vh 8vw 2vh 0;
+  padding: 2vh 0;
 
   font-size: 4vh;
   background-color: $pay-part-back-color;
