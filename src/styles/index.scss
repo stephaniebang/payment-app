@@ -33,12 +33,13 @@ p {
   margin: 0.4vh;
   text-align: center;
   
-  font-size: 2em;
+  font-size: 1.8em;
   color: $normal-text-color;
 }
 
 input {
   font-size: 2em;
+  font-family: $font; 
 }
 
 .header {

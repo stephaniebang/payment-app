@@ -1,12 +1,16 @@
 <template>
-<div class="status">
+<div class="dish-status">
   <!-- Original total cost -->
   <p>Preço total do prato: R${{ total.toFixed(2) }}</p>
 
   <!-- Payment history -->
   <p>Histórico de pagamentos:</p>
-  <p v-for="(val, i) in history" class="history">
-    {{ i+1 }}. R${{ (val).toFixed(2) }}
+  <p
+    v-for="(val, i) in history"
+    :key="`history-${i}`"
+    class="history"
+  >
+    {{ i + 1 }}. R${{ (val).toFixed(2) }}
   </p>
   <p v-if="history.length === 0" class="history">
     Nenhum pagamento realizado
@@ -25,10 +29,10 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
-.status {
+.dish-status {
   grid-area: info;
 
   display: flex;
@@ -37,10 +41,10 @@ export default {
 
   color: $normal-text-color;
 
-  > .history {
+  & > .history {
     margin: 0;
-    
-    font-size: 1.9em;
+
+    font-size: 1.5em;
   }
 }
 </style>

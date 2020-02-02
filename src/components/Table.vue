@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
 .table {
@@ -37,30 +37,32 @@ export default {
     "number"
     "tab";
 
-  margin: 2vh 2vw 0 0;
+  // margin: 2vh 2vw 0 0;
   padding: 1em;
   min-width: 12vw;
   max-width: 12vw;
   min-height: 10vh;
   max-height: 10vh;
+  align-items: center;
+  justify-content: center;
 
-  font-size: 4em;
   text-align: center;
+  font-size: 4em;
   color: $table-color;
 
-  > .number {
+  & > .number {
     grid-area: number;
 
     margin-bottom: 0.25em;
   }
 
-  > .tab {
+  & > .tab {
     grid-area: tab;
 
     font-size: 0.5em;
   }
 
-  > .status-total {
+  & > .status-total {
     width: 100%;
     height: 0.3vw;
     margin-top: 1vw;
@@ -68,7 +70,7 @@ export default {
     background-color: $status-back;
   }
 
-  > .status-total > .paid {
+  & > .status-total > .paid {
     height: 100%;
 
     background-color: $status-front;

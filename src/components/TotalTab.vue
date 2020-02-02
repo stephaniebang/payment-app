@@ -15,7 +15,7 @@ export default {
 </script>
 
 
-<style lang="scss" scoped> 
+<style lang="scss"> 
 @import '~styles/reference.scss';
 
 .total {
@@ -27,7 +27,7 @@ export default {
 
   padding: 0.5em;
 
-  font-size: 8em;
+  font-size: 6em;
   color: $price-left-color;
 }
 </style>

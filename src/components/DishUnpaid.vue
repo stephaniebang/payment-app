@@ -6,7 +6,7 @@
   </div>
 
   <!-- Dish current payment setting -->
-  <div v-if="paying > 0" class="toPay" @click="cancel()">
+  <div v-if="paying > 0" class="to-pay" @click="cancel()">
     <span>R${{ paying.toFixed(2) }}</span>
     <span class="x">X</span>
   </div>
@@ -38,7 +38,7 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
 .unpaid {
@@ -49,20 +49,20 @@ export default {
   align-content: flex-start;
   justify-content: center;
 
-  font-size: 2.2em;
+  font-size: 2em;
 
-  > .value {
+  & > .value {
     display: flex;
     flex-flow: column;
     justify-items: center;
 
-    padding: 0.5vh 0.6vw;
+    padding: 0vh 0.6vw;
     border-radius: 0.7vh;
 
     color: $price-left-color;
   }
 
-  > .toPay {
+  & > .to-pay {
     display: flex;
     flex-flow: row;
     justify-items: center;
@@ -71,14 +71,14 @@ export default {
     padding: 0.5vh 0.6vw;
 
     color: $price-pay-color;
-  }
 
-  > .toPay .x {
-    margin-left: 2vw;
-    padding-top: 0.3vh;
-
-    font-family: 'Arial';
-    font-size: 0.75em;
+    & > .x {
+      margin-left: 2vw;
+      padding-top: 4px;
+  
+      font-family: 'Arial';
+      font-size: 0.75em;
+    }
   }
 }
 </style>

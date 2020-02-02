@@ -5,7 +5,11 @@
 
   <!-- List of dishes -->
   <div class="list">
-    <item v-for="i in numDishes(tableIndex)" :ind="i-1"/>
+    <item
+      v-for="i in numDishes(tableIndex)"
+      :key="`dish-${i}`"
+      :ind="i-1"
+    />
 
     <!-- Pay all items button -->
     <all-button v-if="tableTotal(tableIndex) > 0"/>
@@ -45,7 +49,7 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 .tab {
   grid-area: body;
 
@@ -56,18 +60,20 @@ export default {
     "list"
     "list"
     "button";
-  grid-template-rows: 10%;
 
   height: 100%;
   width: 100%;
 
-  > .list {
+  & > .list {
     grid-area: list;
 
     display: flex;
     flex-flow: column;
     padding: 1.5vh 2vh;
     overflow-y: auto;
+    margin-bottom: 75px;
+
+    & > .all-button { border-bottom: none }
   }
 }
 </style>

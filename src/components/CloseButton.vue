@@ -9,7 +9,7 @@
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
 .button {
@@ -22,7 +22,7 @@
   margin-top: 1.5vh;
   border-radius: 0.1em;
 
-  font-size: 2.1em;
+  font-size: 1.8em;
   background-color: $cancel-button-back-color;
   color: $cancel-button-font-color;
 }

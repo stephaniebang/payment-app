@@ -14,7 +14,7 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
 .button {
@@ -26,7 +26,7 @@ export default {
   padding: 1vh 1vw;
   border-radius: 0.1em;
 
-  font-size: 2.1em;
+  font-size: 2em;
   background-color: $pay-button-back-color;
   color: $pay-button-font-color;
 }

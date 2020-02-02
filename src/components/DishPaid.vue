@@ -1,5 +1,5 @@
 <template>
-<div class="paid">
+<div class="dish-paid">
   <done-icon class="icon"/>
 </div>
 </template>
@@ -17,24 +17,20 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
-.paid {
+.dish-paid {
   grid-area: status;
   justify-self: center;
   align-self: center;
 
   margin-right: 5vw;
-  min-height: 1.1em;
-  max-height: 1.1em;
-  min-width: 1.1em;
-  max-width: 1.1em;
 
   font-size: 2.8em;
   color: $pay-part-back-color;
 
-  > .icon {
+  & > .icon {
     position: relative;
   }
 }

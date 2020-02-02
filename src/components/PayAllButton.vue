@@ -1,5 +1,5 @@
 <template>
-<div class="payAll" @click="pay()">
+<div class="pay-all-button" @click="pay()">
   PAGAR TUDO (R${{ tableTotal(tableIndex).toFixed(2) }})
 </div>
 </template>
@@ -26,15 +26,15 @@ export default{
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
-.payAll {
+.pay-all-button {
   padding: 1vh 1vw;
   margin: 1.5vh 1.5vw;
   border-radius: 0.1em;
 
-  font-size: 3vh;
+  font-size: 3.5vh;
   text-align: center;
 
   background-color: $pay-all-back-color;

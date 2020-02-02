@@ -1,39 +1,60 @@
 <template>
-<div class="itemEdit">
-  <!-- Item total value and payment history -->
-  <dish-status @click.native="changeItemSelection(ind)"
-               :history="dish(ind).history" :total="dish(ind).total"/>
-  
-  <!-- Item payment setting -->
-  <div class="setting" v-if="dish(ind).left > 0">
-    <!-- Full payment option -->
-    <pay-button @click.native="pay(dish(ind).left)"
-                :text="'PAGAR TUDO (R$'+dish(ind).left.toFixed(2)+')'"/>
+  <div class="dish-edit">
+    <!-- Item total value and payment history -->
+    <dish-status
+      @click.native="changeItemSelection(ind)"
+      :history="dish(ind).history"
+      :total="dish(ind).total"
+    />
     
-    <p>ou</p>
+    <!-- Item payment setting -->
+    <div class="setting" v-if="dish(ind).left > 0">
+      <!-- Full payment option -->
+      <pay-button
+        @click.native="pay(dish(ind).left)"
+        :text="'PAGAR TUDO (R$'+dish(ind).left.toFixed(2)+')'"
+      />
+      
+      <p>ou</p>
 
-    <!-- Divided payment option -->
-    <div class="option">
-      <p>Dividir a conta em </p>
-      <input type="number" v-model="divisor" min="2" style="width: 8vw"/>
-    </div>
-    <pay-button @click.native="pay(dividedValue())"
-                :text="'PAGAR DIVIDIDO (R$'+dividedValue().toFixed(2)+')'"/>
-    
-    <p>ou</p>
-    
-    <!-- Partial payment mode -->
-    <div class="option">
-      <p>Pagar apenas </p>
-      <input type="number" v-model="partial" min="0.00" max="dish.left" step="0.01" style="width: 15vw"/>
-    </div>
-    <pay-button @click.native="pay(partialValue())"
-                :text="'PAGAR PARTE (R$'+partialValue().toFixed(2)+')'"/>
+      <!-- Divided payment option -->
+      <div class="option">
+        <p>Dividir a conta em </p>
+        <input
+          type="number"
+          v-model="divisor"
+          min="2"
+          style="width: 7vw; margin-left: .5vw; text-align: center"
+        />
+      </div>
+      <pay-button
+        @click.native="pay(dividedValue())"
+        :text="'PAGAR DIVIDIDO (R$'+dividedValue().toFixed(2)+')'"
+      />
+      
+      <p>ou</p>
+      
+      <!-- Partial payment mode -->
+      <div class="option">
+        <p>Pagar apenas </p>
+        <input
+          type="number"
+          v-model="partial"
+          min="0.00"
+          max="dish.left"
+          step="0.01"
+          style="width: 15vw; margin-left: .5vw; text-align: center"
+        />
+      </div>
+      <pay-button
+        @click.native="pay(partialValue())"
+        :text="'PAGAR PARTE (R$'+partialValue().toFixed(2)+')'"
+      />
 
-    <!-- Close button -->
-    <close-button @click.native="changeItemSelection(ind)"/>
+      <!-- Close button -->
+      <close-button @click.native="changeItemSelection(ind)"/>
+    </div>
   </div>
-</div>
 </template>
 
 
@@ -108,10 +129,10 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/reference.scss';
 
-.itemEdit {
+.dish-edit {
   grid-area: edit;
 
   display: grid;
@@ -122,21 +143,21 @@ export default {
   margin: 1vh 8vw;
   padding: 0 3vw;
 
-  > .setting {
+  & > .setting {
     grid-area: button;
 
     margin-top: 2vh;
 
     display: flex;
     flex-flow: column;
-  }
 
-  > .setting > .option {
-    display: flex;
-    flex-flow: row;
+    & > .option {
+      display: flex;
+      flex-flow: row;
 
-    margin-bottom: 1.5vh;
-    justify-content: center;
+      margin-bottom: 1.5vh;
+      justify-content: center;
+    }
   }
 }
 </style>

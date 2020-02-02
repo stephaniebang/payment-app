@@ -1,8 +1,12 @@
 <template>
-<div class="list">
-  <item v-for="i in numTables" @click.native="updateTableIndex(i-1)"
-   :n="tableNumber(i-1)" :total="tableTotal(i-1)" :dishes="numDishes(i-1)"
-   :perc="tableStatus(i-1)"/>
+<div class="table-list">
+  <item
+    v-for="i in numTables"
+    :key="`table-${i}`"
+    @click.native="updateTableIndex(i-1)"
+    :n="tableNumber(i-1)" :total="tableTotal(i-1)" :dishes="numDishes(i-1)"
+    :perc="tableStatus(i-1)"
+  />
 </div>
 </template>
 
@@ -37,15 +41,15 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
-.list {
-   grid-area: body;
-   align-self: stretch;
+<style lang="scss">
+.table-list {
+  grid-area: body;
+  align-self: stretch;
 
-   display: flex;
-   flex-flow: row wrap;
-   align-content: flex-start;
-   justify-content: space-around;
-   padding: 0 0 2vh 1.5vw;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  justify-content: space-around;
+  padding: 0 0 2vh 1.5vw;
 }
 </style>
